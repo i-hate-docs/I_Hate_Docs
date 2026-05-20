@@ -50,8 +50,8 @@ function Duck() {
     <group ref={root} position={[0, 0.1, 0]} scale={0.85}>
       {/* halo glow */}
       <mesh>
-        <sphereGeometry args={[2.2, 32, 32]} />
-        <meshBasicMaterial color="#FFD400" transparent opacity={0.05} />
+        <sphereGeometry args={[3.0, 32, 32]} />
+        <meshBasicMaterial color="#FFD400" transparent opacity={0.06} blending={THREE.AdditiveBlending} />
       </mesh>
 
       {/* body */}
@@ -202,11 +202,11 @@ function Ambience() {
     <group>
       {/* soft volumetric glow disk behind the duck */}
       <mesh position={[0, 0, -1.2]}>
-        <circleGeometry args={[2.8, 64]} />
+        <circleGeometry args={[4.0, 64]} />
         <meshBasicMaterial
           color="#FFD400"
           transparent
-          opacity={0.08}
+          opacity={0.09}
           blending={THREE.AdditiveBlending}
         />
       </mesh>

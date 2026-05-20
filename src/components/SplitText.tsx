@@ -72,7 +72,7 @@ export function SplitText({
       { key: `w-${i}`, className: "split-word" },
       createElement(
         "span",
-        { style: { display: "inline-block", overflow: "hidden" } },
+        { style: { display: "inline-block", clipPath: "polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%)", paddingLeft: "0.08em", paddingRight: "0.08em", marginLeft: "-0.08em", marginRight: "-0.08em" } },
         createElement(
           "span",
           { className: "split-char", style: { display: "inline-block" } },

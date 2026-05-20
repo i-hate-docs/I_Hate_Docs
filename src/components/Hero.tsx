@@ -107,14 +107,14 @@ export function Hero() {
             duration={1.1}
             delay={0.25}
             trigger="load"
-            className="mt-1 font-display text-5xl font-semibold italic leading-[1.04] tracking-tight text-cyber drop-shadow-[0_0_30px_rgba(255,212,0,0.35)] sm:text-6xl md:text-[5.25rem]"
+            className="mt-1 font-display text-5xl font-semibold italic leading-[1.15] tracking-tight text-cyber drop-shadow-[0_0_30px_rgba(255,212,0,0.35)] sm:text-6xl md:text-[5.25rem]"
           />
 
           <p className="mt-7 max-w-xl text-balance text-base leading-relaxed text-white/70 sm:text-lg">
             <span className="text-white">
               We Love Ducks, just not the Docs.
             </span>{" "}
-            The ultimate AI-powered PDF editor and Slide Generator — edit, sign,
+            The ultimate AI powered PDF editor and Slide Generator. Edit, sign,
             merge, summarize, and turn boring documents into stunning slides in
             seconds.
           </p>
@@ -141,13 +141,13 @@ export function Hero() {
                 />
               ))}
             </span>
-            <span>Trusted by 38,000+ flock members</span>
+            <span>Trusted by 100+ members</span>
           </div>
 
           <div className="mt-10 flex max-w-md items-center gap-6 text-xs text-white/50">
-            <Stat value="2.4M+" label="Pages processed" />
-            <Stat value="120k" label="Slides generated" />
-            <Stat value="99.98%" label="Uptime" />
+            <Stat value="240+" label="Pages processed" />
+            <Stat value="120+" label="Slides generated" />
+            <Stat value="97.99%" label="Uptime" />
           </div>
         </div>
 

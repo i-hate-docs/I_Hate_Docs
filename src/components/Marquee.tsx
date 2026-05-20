@@ -1,14 +1,14 @@
 "use client";
 
 const items = [
-  "Quack-tested",
-  "AI-powered",
-  "Lawyer-approved",
-  "Designer-loved",
-  "Boring-doc-allergic",
-  "Slide-friendly",
-  "Pond-native",
-  "Caffeine-fueled",
+  "Quack tested",
+  "AI powered",
+  "Lawyer approved",
+  "Designer loved",
+  "Boring doc allergic",
+  "Slide friendly",
+  "Pond native",
+  "Caffeine fueled",
 ];
 
 export function Marquee() {

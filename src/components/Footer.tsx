@@ -28,9 +28,7 @@ export function Footer() {
           />
           <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-end">
             <div>
-              <div className="mb-3 text-xs uppercase tracking-[0.28em] text-white/45">
-                Final boarding call
-              </div>
+
               <SplitText
                 as="h2"
                 text="Ready to join the flock?"
@@ -68,23 +66,7 @@ export function Footer() {
               We Love Ducks, just not the Docs. Made with too much caffeine in a
               very small pond.
             </p>
-            <div className="mt-6 flex items-center gap-2">
-              {[
-                { l: "𝕏", h: "#" },
-                { l: "in", h: "#" },
-                { l: "GH", h: "#" },
-                { l: "YT", h: "#" },
-              ].map((s) => (
-                <a
-                  key={s.l}
-                  href={s.h}
-                  aria-label={s.l}
-                  className="grid h-9 w-9 place-items-center rounded-full glass text-sm text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white"
-                >
-                  {s.l}
-                </a>
-              ))}
-            </div>
+
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
@@ -134,7 +116,7 @@ function EasterEggDuck() {
     "Quack quack!",
     "Honk?",
     "🦆",
-    "Beep beep — I'm a duck.",
+    "Beep beep, I'm a duck.",
     "*quietly judging your docs*",
   ];
 

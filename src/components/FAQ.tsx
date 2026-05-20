@@ -23,7 +23,7 @@ const items = [
   },
   {
     q: "Do I have to credit a duck?",
-    a: "No — but the duck appreciates a quack on social media.",
+    a: "No, but the duck appreciates a quack on social media.",
   },
 ];
 

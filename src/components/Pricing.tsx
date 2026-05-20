@@ -132,7 +132,7 @@ export function Pricing() {
         </div>
 
         <div className="mt-10 text-center text-xs text-white/40">
-          Prices in USD · cancel anytime · no doc-watermarks, ever.
+          Prices in USD · cancel anytime · no doc watermarks, ever.
         </div>
       </div>
     </section>

@@ -34,7 +34,6 @@ export function DuckVsDoc() {
     const onMove = (e: PointerEvent) => {
       if (!draggingRef.current) return;
       setFromClientX(e.clientX);
-      // emit duck-footprint track
       const rect = wrap.getBoundingClientRect();
       const id = ++trackId.current;
       setTracks((t) =>
@@ -79,8 +78,8 @@ export function DuckVsDoc() {
             className="font-display text-3xl font-semibold leading-tight text-white sm:text-4xl md:text-5xl"
           />
           <p className="max-w-xl text-sm text-white/60 sm:text-base">
-            On the left, a real legal clause your eyes refuse to read. On the
-            right, the same content after the duck has had a quack at it.
+            On the left, a 23 page services agreement nobody wants to read. On the
+            right, what our AI distills it down to in under 30 seconds.
           </p>
         </div>
 
@@ -106,10 +105,10 @@ export function DuckVsDoc() {
 
           {/* labels */}
           <span className="absolute left-4 top-4 rounded-full bg-black/50 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white/70 ring-1 ring-white/10">
-            Before · The Doc
+            Before · 23 pages
           </span>
           <span className="absolute right-4 top-4 rounded-full bg-cyber/95 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-black ring-1 ring-cyber/30">
-            After · The Duck
+            After · 30 seconds
           </span>
 
           {/* divider */}
@@ -163,40 +162,72 @@ export function DuckVsDoc() {
 
 function MessyDoc() {
   return (
-    <div className="relative h-full w-full bg-[#15151c] p-6 sm:p-10">
+    <div className="relative h-full w-full bg-[#15151c] p-5 sm:p-8 overflow-hidden">
       <div className="absolute inset-0 noise opacity-30" />
-      <div className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/40">
-        Exhibit A · 47 pages · scanned 2017
+      <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-white/40">
+        Services Agreement · 23 pages · Last edited Jan 2025
       </div>
-      <div className="space-y-2 font-mono text-[10px] leading-[1.55] text-white/70 sm:text-[11px] md:text-xs">
+      <div className="space-y-1.5 font-mono text-[8px] leading-[1.5] text-white/70 sm:text-[9px] md:text-[10px]">
         {[
-          "WHEREAS, the party of the first part (hereinafter, the “Quacker”),",
-          "doth covenant, agree, and otherwise affirm pursuant to §4.2(c)(iii)",
-          "of that certain Master Services Agreement dated June 14, MMXVII,",
-          "that all materials, including but not limited to PDFs, scans, faxes,",
-          "and any successor formats not yet invented as of the Effective Date,",
-          "shall be subject to a non-exclusive, royalty-free, sublicensable,",
-          "fully-paid-up license to be used solely for the limited purposes",
-          "set forth in Schedule 3 hereto, provided however that nothing in",
-          "this clause shall be construed as a waiver of any rights under §7.1,",
-          "§7.2, or any successor provisions thereto, including amendments,",
-          "addenda, addendums, or duck-typed substitutes filed with the clerk…",
+          "SERVICES AGREEMENT",
+          "",
+          "This Services Agreement (the \"Agreement\") is entered into as of January 15,",
+          "2025, by and between TechFlow Inc., a Delaware corporation with its principal",
+          "offices at 440 Market Street, Suite 1200, San Francisco, CA 94105 (the",
+          "\"Company\") and DataBridge Solutions LLC, a California limited liability",
+          "company with its principal offices at 2200 Powell Street, Emeryville, CA",
+          "94608 (the \"Contractor\").",
+          "",
+          "1. SCOPE OF WORK. The Contractor agrees to provide software development",
+          "services including but not limited to: (a) backend API development and",
+          "integration with third party services; (b) database architecture design,",
+          "optimization, and migration from legacy PostgreSQL 9.6 to PostgreSQL 16;",
+          "(c) cloud infrastructure provisioning, configuration, and deployment on",
+          "Amazon Web Services (AWS) including EC2, RDS, S3, CloudFront, and Lambda;",
+          "(d) ongoing maintenance, bug fixes, security patching, and performance",
+          "monitoring as described in Exhibit A attached hereto and incorporated by",
+          "reference. All services shall conform to the specifications set forth in",
+          "the Statement of Work (SOW) dated January 10, 2025.",
+          "",
+          "2. TERM AND TERMINATION. This Agreement shall commence on the Effective Date",
+          "and shall continue for an initial period of twelve (12) months (the \"Initial",
+          "Term\"). Thereafter, this Agreement shall automatically renew for successive",
+          "twelve (12) month periods (each a \"Renewal Term\") unless either party provides",
+          "written notice of non renewal at least thirty (30) days prior to the",
+          "expiration of the then current term. Either party may terminate this Agreement",
+          "for cause upon thirty (30) days written notice if the other party materially",
+          "breaches any provision of this Agreement and fails to cure such breach within",
+          "the notice period.",
+          "",
+          "3. COMPENSATION. The Company shall pay the Contractor a monthly fee of Forty",
+          "Two Thousand Five Hundred Dollars ($42,500.00) payable within fifteen (15)",
+          "business days of receipt of a valid invoice. Late payments shall accrue interest",
+          "at the rate of 1.5% per month or the maximum rate permitted by applicable law,",
+          "whichever is lower. The Contractor shall submit detailed invoices itemizing",
+          "hours worked, tasks completed, and expenses incurred during the billing period.",
+          "",
+          "4. INTELLECTUAL PROPERTY. All work product, inventions, discoveries, code,",
+          "documentation, and materials created by the Contractor in the performance of",
+          "services under this Agreement (collectively, \"Work Product\") shall be the sole",
+          "and exclusive property of the Company. The Contractor hereby assigns to the",
+          "Company all right, title, and interest in and to the Work Product, including",
+          "all intellectual property rights therein...",
         ].map((line, i) => (
           <p
             key={i}
             className="origin-left"
             style={{
-              transform: `rotate(${(Math.sin(i) * 0.6).toFixed(2)}deg) translateX(${(Math.cos(i) * 4).toFixed(1)}px)`,
-              opacity: 0.45 + (i % 3) * 0.18,
-              filter: i % 4 === 0 ? "blur(0.4px)" : "none",
+              transform: `rotate(${(Math.sin(i) * 0.3).toFixed(2)}deg) translateX(${(Math.cos(i) * 2).toFixed(1)}px)`,
+              opacity: 0.5 + (i % 3) * 0.15,
+              filter: i % 5 === 0 ? "blur(0.3px)" : "none",
             }}
           >
-            {line}
+            {line || "\u00A0"}
           </p>
         ))}
       </div>
       {/* red marks */}
-      <div className="absolute right-10 top-24 h-12 w-12 rotate-12">
+      <div className="absolute right-8 top-20 h-10 w-10 rotate-12">
         <svg viewBox="0 0 24 24" className="h-full w-full text-red-400/80">
           <path
             d="M4 4l16 16M20 4L4 20"
@@ -206,8 +237,21 @@ function MessyDoc() {
           />
         </svg>
       </div>
-      <div className="absolute bottom-6 right-12 rounded bg-red-500/15 px-2 py-1 text-[10px] font-medium text-red-300 ring-1 ring-red-400/30">
-        ⚠ unread for 14 months
+      <div className="absolute right-24 top-[45%] h-8 w-8 -rotate-6">
+        <svg viewBox="0 0 24 24" className="h-full w-full text-red-400/60">
+          <path
+            d="M4 4l16 16M20 4L4 20"
+            stroke="currentColor"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+      <div className="absolute bottom-4 left-6 rounded bg-amber-500/15 px-2 py-1 text-[9px] font-medium text-amber-300 ring-1 ring-amber-400/30">
+        ⚠ TL;DR anyone?
+      </div>
+      <div className="absolute bottom-4 right-8 rounded bg-red-500/15 px-2 py-1 text-[9px] font-medium text-red-300 ring-1 ring-red-400/30">
+        23 pages · ~45 min read
       </div>
     </div>
   );
@@ -220,39 +264,39 @@ function CleanDoc() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-cyber px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-black">
             <span className="h-1.5 w-1.5 rounded-full bg-black" />
-            Summary · AI
+            AI Summary
           </div>
           <h3 className="mt-3 text-xl font-semibold leading-tight text-black sm:text-2xl">
-            Master Services Agreement — at a glance
+            23 pages → 4 key points
           </h3>
         </div>
         <div className="text-right text-[10px] uppercase tracking-wider text-black/40">
-          1 page · 38s read
+          Generated in 28s
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        <Card title="Who" body="Quacker LLC ↔ Counterparty Inc." accent="#FFD400" />
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <Card title="Parties" body="TechFlow Inc. and DataBridge Solutions LLC. Software dev services contract." accent="#FFD400" />
         <Card
-          title="Term"
-          body="3 yrs · auto-renew unless 60-day notice"
+          title="Money"
+          body="$42,500/mo. Net 15 days. 1.5% late fee."
           accent="#00C8FF"
         />
         <Card
-          title="License"
-          body="Non-exclusive, royalty-free, sublicensable. Scoped to Schedule 3."
+          title="Term"
+          body="12 months, auto renews. 30 day notice to cancel."
           accent="#FFD400"
         />
         <Card
-          title="Watch-outs"
-          body="§7.1 / §7.2 carve-outs. FY26 renewal review."
+          title="⚠ Risks"
+          body="All IP goes to Company. No SLA penalties defined. Review Section 4."
           accent="#FF7A00"
         />
       </div>
 
       <div className="absolute bottom-6 right-6 flex items-center gap-2 text-[10px] uppercase tracking-wider text-black/50">
-        <span className="h-1.5 w-1.5 rounded-full bg-cyber" /> Generated by Duck
-        · cited 11 sources
+        <span className="h-1.5 w-1.5 rounded-full bg-cyber" /> Summarized by AI
+        · 23 pages → 28 seconds
       </div>
     </div>
   );

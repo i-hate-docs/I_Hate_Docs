@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "./SplitText";
@@ -25,7 +25,7 @@ const FEATURES: Feature[] = [
     body: "All the boring stuff — annotate, redact, sign, merge — but with an AI copilot that actually understands what's inside.",
     bullets: [
       "Inline AI rewrite & summarize",
-      "Field-by-field e-signature flow",
+      "Step by step e-signature flow",
       "Merge, split, redact in one click",
       "Ask: \"What does clause 7 mean?\"",
     ],
@@ -53,7 +53,7 @@ const FEATURES: Feature[] = [
     body: "Pull answers, citations, and structured tables out of any document — even 800-page filings — without scrolling.",
     bullets: [
       "Citations linked to source pages",
-      "Multi-doc cross-referencing",
+      "Multi doc cross referencing",
       "Tables, timelines, exports",
       "Private mode (zero retention)",
     ],
@@ -70,7 +70,6 @@ export function Features() {
     if (!wrapRef.current || !trackRef.current) return;
     const ctx = gsap.context(() => {
       const track = trackRef.current!;
-      // pin only on wide screens
       const mm = gsap.matchMedia();
       mm.add("(min-width: 900px)", () => {
         const distance = () => track.scrollWidth - window.innerWidth + 80;
@@ -257,109 +256,10 @@ function FeatureVisual({
   accent: string;
 }) {
   if (kind === "editor") {
-    return (
-      <div className="absolute inset-0 grid grid-cols-[1fr_2fr] gap-3 p-4">
-        <div className="flex flex-col gap-2 rounded-xl bg-black/30 p-3 ring-1 ring-white/5">
-          {[
-            "Annotate",
-            "Sign",
-            "Redact",
-            "Merge",
-            "Split",
-            "OCR",
-            "AI Edit",
-          ].map((s, i) => (
-            <div
-              key={s}
-              className="flex items-center justify-between rounded-md px-2 py-1.5 text-[11px] text-white/70 hover:bg-white/5"
-              style={
-                i === 6 ? { color: accent, background: `${accent}11` } : {}
-              }
-            >
-              <span>{s}</span>
-              <span className="opacity-40">⌘{i + 1}</span>
-            </div>
-          ))}
-        </div>
-        <div className="relative overflow-hidden rounded-xl bg-white/95 p-4 text-black">
-          <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-red-400" />
-            <span className="h-2 w-2 rounded-full bg-yellow-400" />
-            <span className="h-2 w-2 rounded-full bg-green-400" />
-            <span className="ml-3 text-[10px] uppercase tracking-wider text-black/50">
-              Contract_v3.pdf
-            </span>
-          </div>
-          <div className="mt-3 space-y-1.5">
-            <div className="h-2 w-3/4 rounded bg-black/90" />
-            <div className="h-1.5 w-1/3 rounded bg-black/40" />
-            <div className="mt-3 space-y-1">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-1.5 rounded bg-black/70"
-                  style={{ width: `${[88, 92, 70, 95, 80, 96, 60, 84][i]}%` }}
-                />
-              ))}
-            </div>
-            <div
-              className="mt-3 inline-block rounded px-2 py-0.5 text-[10px] font-medium text-black"
-              style={{ background: accent }}
-            >
-              AI: summarize section 3 →
-            </div>
-          </div>
-          <div
-            className="absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-50"
-            style={{
-              background: `radial-gradient(circle, ${accent}, transparent 70%)`,
-            }}
-          />
-        </div>
-      </div>
-    );
+    return <InteractiveEditor accent={accent} />;
   }
   if (kind === "slides") {
-    return (
-      <div className="absolute inset-0 grid grid-cols-3 gap-3 p-4">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="relative overflow-hidden rounded-xl bg-gradient-to-br from-white/10 to-white/[0.02] p-3 ring-1 ring-white/10"
-          >
-            <div
-              className="absolute inset-x-0 top-0 h-1"
-              style={{
-                background: i === 1 ? accent : `${accent}55`,
-              }}
-            />
-            <div className="text-[10px] uppercase tracking-wider text-white/50">
-              Slide {i + 1}
-            </div>
-            <div className="mt-2 h-2 w-3/4 rounded bg-white/80" />
-            <div className="mt-1 h-1.5 w-1/2 rounded bg-white/40" />
-            <div className="mt-4 grid gap-1">
-              {Array.from({ length: 4 }).map((_, j) => (
-                <div
-                  key={j}
-                  className="h-1.5 rounded"
-                  style={{
-                    background: j === 0 ? `${accent}cc` : "rgba(255,255,255,0.3)",
-                    width: `${[80, 65, 90, 50][j]}%`,
-                  }}
-                />
-              ))}
-            </div>
-            <div
-              className="absolute -bottom-8 -right-6 h-20 w-20 rounded-full opacity-60"
-              style={{
-                background: `radial-gradient(circle, ${accent}66, transparent 70%)`,
-              }}
-            />
-          </div>
-        ))}
-      </div>
-    );
+    return <SlidesPreview accent={accent} />;
   }
   return (
     <div className="absolute inset-0 flex flex-col gap-3 p-5">
@@ -415,6 +315,237 @@ function Bubble({
         }
       >
         {children}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Interactive Editor Demo ─── */
+function InteractiveEditor({ accent }: { accent: string }) {
+  const [activeTab, setActiveTab] = useState("Edit");
+  const [editText, setEditText] = useState(
+    "This Services Agreement is entered into as of January 15, 2025, by and between TechFlow Inc. and DataBridge Solutions LLC for the purpose of software development services including backend API development, database optimization, and cloud infrastructure setup."
+  );
+  const [aiResult, setAiResult] = useState("");
+  const [processing, setProcessing] = useState(false);
+
+  const tabs = ["Edit", "Sign", "OCR", "AI Rewrite"];
+
+  const handleAiRewrite = () => {
+    if (processing || !editText.trim()) return;
+    setProcessing(true);
+    setAiResult("");
+    const simplified = "TechFlow Inc. hired DataBridge Solutions to build backend APIs, optimize databases, and set up cloud infrastructure. Contract started January 15, 2025.";
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setAiResult(simplified.slice(0, i));
+      if (i >= simplified.length) {
+        clearInterval(interval);
+        setProcessing(false);
+      }
+    }, 12);
+  };
+
+  return (
+    <div className="absolute inset-0 grid grid-cols-[auto_1fr] gap-0 overflow-hidden">
+      {/* sidebar */}
+      <div className="flex flex-col gap-0.5 border-r border-white/5 bg-black/40 px-1.5 py-3 w-[72px]">
+        {tabs.map((s) => (
+          <button
+            key={s}
+            onClick={() => { setActiveTab(s); setAiResult(""); }}
+            className="rounded-md px-1.5 py-2 text-[10px] text-white/70 hover:bg-white/5 transition-colors text-center leading-tight"
+            style={
+              activeTab === s ? { color: accent, background: `${accent}15` } : {}
+            }
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+      {/* main area */}
+      <div className="relative flex flex-col overflow-hidden bg-white/[0.03] p-3">
+        {/* top bar */}
+        <div className="flex items-center gap-1.5 mb-2 shrink-0">
+          <span className="h-2 w-2 rounded-full bg-red-400" />
+          <span className="h-2 w-2 rounded-full bg-yellow-400" />
+          <span className="h-2 w-2 rounded-full bg-green-400" />
+          <span className="ml-2 text-[9px] uppercase tracking-wider text-white/40">
+            {activeTab === "Sign" ? "NDA_Final.pdf" : activeTab === "OCR" ? "Scanned_Receipt.pdf" : "Contract_v3.pdf"}
+          </span>
+        </div>
+
+        {activeTab === "Edit" && (
+          <div className="flex flex-col gap-2 grow min-h-0">
+            <textarea
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              className="grow rounded-lg bg-white/90 p-3 text-[11px] leading-relaxed text-black/80 resize-none focus:outline-none focus:ring-1 min-h-0"
+              style={{ focusRingColor: accent } as React.CSSProperties}
+              placeholder="Type or paste your document text here..."
+            />
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[9px] text-white/40">{editText.length} characters</span>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "Sign" && (
+          <div className="flex flex-col items-center justify-center grow gap-3 min-h-0">
+            <div className="rounded-xl bg-white/90 p-4 w-full max-w-[240px]">
+              <div className="text-[10px] text-black/50 uppercase tracking-wider mb-2">Signature field</div>
+              <div className="h-12 rounded-lg border-2 border-dashed border-black/20 flex items-center justify-center">
+                <span className="text-[10px] text-black/40 italic">Click to sign here</span>
+              </div>
+              <div className="mt-2 flex gap-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                <span className="text-[9px] text-black/60">2 of 3 fields signed</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "OCR" && (
+          <div className="flex flex-col gap-2 grow min-h-0">
+            <div className="rounded-lg bg-black/20 p-3 ring-1 ring-white/10">
+              <div className="text-[9px] text-white/40 uppercase tracking-wider mb-2">Scanned image → extracted text</div>
+              <div className="space-y-1.5 text-[11px] text-white/80">
+                <div className="flex justify-between"><span className="text-white/50">Vendor:</span><span>Acme Corp</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Date:</span><span>03/15/2025</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Total:</span><span className="font-semibold" style={{color: accent}}>$142.87</span></div>
+                <div className="flex justify-between"><span className="text-white/50">Tax:</span><span>$12.44</span></div>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-1.5 text-[9px]" style={{color: accent}}>
+              <span className="h-1.5 w-1.5 rounded-full" style={{background: accent}} />
+              OCR confidence: 98.2%
+            </div>
+          </div>
+        )}
+
+        {activeTab === "AI Rewrite" && (
+          <div className="flex flex-col gap-2 grow min-h-0">
+            <div className="rounded-lg bg-black/20 p-2.5 ring-1 ring-white/10 shrink-0">
+              <div className="text-[9px] text-white/40 uppercase tracking-wider mb-1">Original</div>
+              <div className="text-[10px] text-white/60 leading-relaxed">{editText.slice(0, 120)}...</div>
+            </div>
+            {aiResult && (
+              <div className="rounded-lg p-2.5 ring-1 shrink-0" style={{background: `${accent}08`, borderColor: `${accent}33`}}>
+                <div className="text-[9px] uppercase tracking-wider mb-1" style={{color: accent}}>AI Rewrite</div>
+                <div className="text-[10px] text-white/85 leading-relaxed">{aiResult}{processing && <span className="animate-pulse">|</span>}</div>
+              </div>
+            )}
+            <button
+              onClick={handleAiRewrite}
+              disabled={processing}
+              className="mt-auto shrink-0 self-start rounded-full px-3 py-1.5 text-[10px] font-medium text-black transition-transform hover:scale-105 disabled:opacity-50"
+              style={{ background: accent }}
+            >
+              {processing ? "Rewriting..." : "✨ Rewrite with AI"}
+            </button>
+          </div>
+        )}
+
+        <div
+          className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-40 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle, ${accent}, transparent 70%)`,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Slides Preview ─── */
+function SlidesPreview({ accent }: { accent: string }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const slides = [
+    {
+      title: "Q4 2025 Revenue Report",
+      subtitle: "TechFlow Inc. · Confidential",
+      items: [
+        { label: "Total Revenue", value: "$4.2M", change: "+18%" },
+        { label: "New Clients", value: "42", change: "+31%" },
+        { label: "Retention Rate", value: "94.7%", change: "+2.1%" },
+      ],
+    },
+    {
+      title: "Key Highlights",
+      subtitle: "What went well this quarter",
+      items: [
+        { label: "AI Adoption", value: "3x", change: "growth" },
+        { label: "Churn Rate", value: "2.1%", change: "down" },
+        { label: "NPS Score", value: "72", change: "+8 pts" },
+      ],
+    },
+    {
+      title: "2026 Roadmap",
+      subtitle: "Next steps and priorities",
+      items: [
+        { label: "Expand", value: "APAC", change: "Q1" },
+        { label: "Launch", value: "v3 Beta", change: "Q2" },
+        { label: "Hire", value: "12 eng", change: "Q1-Q2" },
+      ],
+    },
+  ];
+
+  const current = slides[activeSlide];
+
+  return (
+    <div className="absolute inset-0 grid grid-cols-[60px_1fr] gap-0 overflow-hidden">
+      {/* slide thumbnails */}
+      <div className="flex flex-col gap-2 border-r border-white/5 bg-black/30 p-2">
+        {slides.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveSlide(i)}
+            className={`relative rounded-lg p-1.5 transition-all ring-1 ${
+              i === activeSlide
+                ? "ring-white/30 bg-white/10"
+                : "ring-white/5 bg-white/[0.02] hover:bg-white/5"
+            }`}
+          >
+            <div className="h-1 w-full rounded-full mb-1" style={{ background: i === activeSlide ? accent : `${accent}44` }} />
+            <div className="h-1 w-3/4 rounded-full bg-white/30 mb-0.5" />
+            <div className="h-0.5 w-1/2 rounded-full bg-white/20" />
+            <div className="absolute bottom-0.5 right-1 text-[7px] text-white/30">{i + 1}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* main slide */}
+      <div className="relative flex flex-col p-4 overflow-hidden">
+        <div className="h-1 w-full rounded-full mb-3" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}44)` }} />
+        <div className="text-[13px] font-semibold text-white/90">{current.title}</div>
+        <div className="text-[9px] text-white/40 uppercase tracking-wider mt-0.5">{current.subtitle}</div>
+
+        <div className="mt-4 grid grid-cols-3 gap-2 grow">
+          {current.items.map((item, j) => (
+            <div key={j} className="flex flex-col items-center justify-center rounded-xl bg-white/[0.04] p-2 ring-1 ring-white/[0.06]">
+              <div className="text-[9px] text-white/40 uppercase tracking-wider">{item.label}</div>
+              <div className="text-lg font-bold text-white mt-1" style={{ textShadow: `0 0 20px ${accent}44` }}>{item.value}</div>
+              <div className="text-[9px] font-medium mt-0.5" style={{ color: accent }}>{item.change}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between mt-3 shrink-0">
+          <div className="text-[8px] text-white/30">Generated from Earnings_Q4.pdf</div>
+          <div className="flex items-center gap-1">
+            {slides.map((_, i) => (
+              <span key={i} className="h-1 w-1 rounded-full" style={{ background: i === activeSlide ? accent : 'rgba(255,255,255,0.2)' }} />
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="absolute -right-8 -bottom-8 h-24 w-24 rounded-full opacity-40 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle, ${accent}66, transparent 70%)`,
+          }}
+        />
       </div>
     </div>
   );
