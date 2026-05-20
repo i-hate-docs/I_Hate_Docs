@@ -98,7 +98,7 @@ export function Features() {
       ref={wrapRef}
       className="relative overflow-hidden bg-obsidian"
     >
-      <div className="mx-auto max-w-7xl px-6 pb-8 pt-12 md:pb-12 md:pt-16">
+      <div className="mx-auto max-w-7xl px-6 pb-4 pt-8 md:pb-6 md:pt-10">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end md:gap-12">
           <div className="max-w-2xl">
             <div className="mb-3 text-xs uppercase tracking-[0.28em] text-white/40">
@@ -122,7 +122,7 @@ export function Features() {
         </div>
       </div>
 
-      <div className="relative h-[80svh] md:h-[85svh]">
+      <div className="relative h-[75svh] md:h-[80svh]">
         <div
           ref={trackRef}
           className="absolute inset-y-0 left-0 flex items-center gap-8 pl-6 pr-24 will-change-transform"
