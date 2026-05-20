@@ -98,9 +98,9 @@ export function Features() {
       ref={wrapRef}
       className="relative overflow-hidden bg-obsidian"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 mx-auto max-w-7xl px-6 pt-24 md:pt-32">
-        <div className="flex items-end justify-between gap-8">
-          <div>
+      <div className="mx-auto max-w-7xl px-6 pb-10 pt-24 md:pb-16 md:pt-32">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end md:gap-12">
+          <div className="max-w-2xl">
             <div className="mb-3 text-xs uppercase tracking-[0.28em] text-white/40">
               Features
             </div>
@@ -108,10 +108,10 @@ export function Features() {
               as="h2"
               text="One platform. Every document."
               by="word"
-              className="font-display text-3xl font-semibold leading-tight text-white sm:text-4xl md:text-5xl"
+              className="font-display text-3xl font-semibold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-5xl"
             />
           </div>
-          <p className="hidden max-w-sm text-sm text-white/55 md:block">
+          <p className="max-w-sm text-sm text-white/55">
             Scroll →{" "}
             <span className="text-white/85">
               to glide through the suite.
@@ -122,7 +122,7 @@ export function Features() {
         </div>
       </div>
 
-      <div className="relative h-[100svh]">
+      <div className="relative h-[80svh] md:h-[85svh]">
         <div
           ref={trackRef}
           className="absolute inset-y-0 left-0 flex items-center gap-8 pl-6 pr-24 will-change-transform"
