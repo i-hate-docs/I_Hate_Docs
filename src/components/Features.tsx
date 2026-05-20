@@ -98,7 +98,7 @@ export function Features() {
       ref={wrapRef}
       className="relative overflow-hidden bg-obsidian"
     >
-      <div className="mx-auto max-w-7xl px-6 pb-10 pt-24 md:pb-16 md:pt-32">
+      <div className="mx-auto max-w-7xl px-6 pb-8 pt-12 md:pb-12 md:pt-16">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end md:gap-12">
           <div className="max-w-2xl">
             <div className="mb-3 text-xs uppercase tracking-[0.28em] text-white/40">

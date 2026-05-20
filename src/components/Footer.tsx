@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { DuckLogo } from "./DuckLogo";
 import { MagneticButton } from "./MagneticButton";
@@ -128,6 +128,7 @@ export function Footer() {
 
 function EasterEggDuck() {
   const [quack, setQuack] = useState<string | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
   const phrases = [
     "Quack!",
     "Quack quack!",
@@ -137,9 +138,54 @@ function EasterEggDuck() {
     "*quietly judging your docs*",
   ];
 
+  const playQuack = () => {
+    if (typeof window === "undefined") return;
+    if (!audioCtxRef.current) {
+      const Ctx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext;
+      if (!Ctx) return;
+      audioCtxRef.current = new Ctx();
+    }
+    const ctx = audioCtxRef.current;
+    if (ctx.state === "suspended") ctx.resume();
+    const now = ctx.currentTime;
+
+    // Two short "quack" syllables with a sweeping sawtooth + bandpass
+    const syllable = (start: number, base: number, dur: number, peak: number) => {
+      const osc = ctx.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(base * 2.4, start);
+      osc.frequency.exponentialRampToValueAtTime(base, start + dur * 0.45);
+      osc.frequency.exponentialRampToValueAtTime(base * 0.55, start + dur);
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(950, start);
+      filter.frequency.linearRampToValueAtTime(550, start + dur);
+      filter.Q.value = 4;
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(peak, start + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + dur + 0.04);
+    };
+
+    syllable(now, 360, 0.16, 0.22);
+    syllable(now + 0.13, 300, 0.22, 0.18);
+  };
+
   const onClick = () => {
     const word = phrases[Math.floor(Math.random() * phrases.length)];
     setQuack(word);
+    playQuack();
     window.scrollTo({ top: 0, behavior: "smooth" });
     setTimeout(() => setQuack(null), 1500);
   };

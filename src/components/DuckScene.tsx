@@ -47,7 +47,7 @@ function Duck() {
   });
 
   return (
-    <group ref={root} position={[2.5, 0.1, 0]}>
+    <group ref={root} position={[0, 0.1, 0]} scale={0.85}>
       {/* halo glow */}
       <mesh>
         <sphereGeometry args={[2.2, 32, 32]} />
@@ -154,218 +154,120 @@ function Duck() {
   );
 }
 
-function Laser() {
-  const ref = useRef<THREE.Mesh>(null);
-  const mat = useRef<THREE.MeshBasicMaterial>(null);
-  useFrame((state) => {
-    if (!ref.current || !mat.current) return;
-    const t = state.clock.elapsedTime;
-    const v = POINTER.sClean;
-    mat.current.opacity = 0.12 + 0.85 * v + 0.06 * Math.sin(t * 14);
-    ref.current.scale.x = 0.6 + 1.2 * Math.sin(t * 9) * v * 0.05 + v * 0.3;
-    ref.current.scale.z = 0.6 + v * 0.3;
-  });
-  return (
-    <mesh
-      ref={ref}
-      position={[1.4, 0.35, 0.4]}
-      rotation={[0, 0, Math.PI / 2]}
-    >
-      <cylinderGeometry args={[0.05, 0.05, 3.6, 24, 1, true]} />
-      <meshBasicMaterial
-        ref={mat as never}
-        color="#FFD400"
-        transparent
-        opacity={0.6}
-        blending={THREE.AdditiveBlending}
-        side={THREE.DoubleSide}
-      />
-    </mesh>
+function Ambience() {
+  const ringA = useRef<THREE.Mesh>(null);
+  const ringB = useRef<THREE.Mesh>(null);
+  const shards = useRef<THREE.Group>(null);
+
+  // stable orbit params so the shards don't reshuffle each frame
+  const orbits = useMemo(
+    () =>
+      [
+        { r: 2.6, y: 0.4, phase: 0, speed: 0.35, size: 0.16, hue: "#FFD400" },
+        { r: 3.0, y: -0.3, phase: 1.2, speed: -0.28, size: 0.12, hue: "#00E5FF" },
+        { r: 2.3, y: 0.9, phase: 2.4, speed: 0.45, size: 0.1, hue: "#B026FF" },
+        { r: 3.2, y: -0.6, phase: 3.6, speed: -0.22, size: 0.18, hue: "#FFD400" },
+        { r: 2.75, y: 0.05, phase: 4.8, speed: 0.32, size: 0.09, hue: "#00E5FF" },
+      ] as const,
+    [],
   );
-}
-
-function makeMessyTexture() {
-  const c = document.createElement("canvas");
-  c.width = 512;
-  c.height = 640;
-  const ctx = c.getContext("2d")!;
-  // bg
-  const grad = ctx.createLinearGradient(0, 0, 0, 640);
-  grad.addColorStop(0, "#1a1a22");
-  grad.addColorStop(1, "#101015");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 512, 640);
-  // border
-  ctx.strokeStyle = "rgba(255,255,255,0.12)";
-  ctx.lineWidth = 4;
-  ctx.strokeRect(8, 8, 496, 624);
-  // chaotic lines
-  ctx.strokeStyle = "rgba(220,220,255,0.45)";
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 22; i++) {
-    const y = 40 + i * 24 + (Math.random() - 0.5) * 8;
-    ctx.beginPath();
-    ctx.moveTo(28, y);
-    for (let x = 28; x < 480; x += 6) {
-      ctx.lineTo(x, y + (Math.random() - 0.5) * 8);
-    }
-    ctx.stroke();
-  }
-  // smudges
-  ctx.fillStyle = "rgba(0,0,0,0.55)";
-  ctx.beginPath();
-  ctx.arc(370, 470, 50, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "rgba(255,80,80,0.5)";
-  ctx.fillRect(60, 540, 120, 12);
-  // X marks
-  ctx.strokeStyle = "rgba(255,60,60,0.7)";
-  ctx.lineWidth = 6;
-  for (let i = 0; i < 3; i++) {
-    const x = 80 + i * 160;
-    const y = 600;
-    ctx.beginPath();
-    ctx.moveTo(x - 18, y - 18);
-    ctx.lineTo(x + 18, y + 18);
-    ctx.moveTo(x - 18, y + 18);
-    ctx.lineTo(x + 18, y - 18);
-    ctx.stroke();
-  }
-  // crumple noise
-  for (let i = 0; i < 1200; i++) {
-    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.08})`;
-    ctx.fillRect(Math.random() * 512, Math.random() * 640, 1, 1);
-  }
-  const tex = new THREE.CanvasTexture(c);
-  tex.anisotropy = 8;
-  tex.needsUpdate = true;
-  return tex;
-}
-
-function makeCleanTexture() {
-  const c = document.createElement("canvas");
-  c.width = 512;
-  c.height = 640;
-  const ctx = c.getContext("2d")!;
-  // bg: pristine off-white
-  const grad = ctx.createLinearGradient(0, 0, 0, 640);
-  grad.addColorStop(0, "#fafafa");
-  grad.addColorStop(1, "#f0efea");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 512, 640);
-  // border
-  ctx.strokeStyle = "rgba(0,0,0,0.08)";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(4, 4, 504, 632);
-  // top "PDF" badge
-  ctx.fillStyle = "#FFD400";
-  ctx.fillRect(32, 32, 92, 32);
-  ctx.fillStyle = "#0A0A0A";
-  ctx.font = "bold 20px 'Inter', system-ui, sans-serif";
-  ctx.textBaseline = "middle";
-  ctx.fillText("PDF", 56, 50);
-  // headline
-  ctx.fillStyle = "#0A0A0A";
-  ctx.fillRect(32, 96, 380, 18);
-  ctx.fillStyle = "rgba(0,0,0,0.5)";
-  ctx.fillRect(32, 124, 220, 8);
-  // body
-  ctx.fillStyle = "rgba(0,0,0,0.85)";
-  for (let i = 0; i < 14; i++) {
-    const y = 168 + i * 24;
-    const w = i % 4 === 3 ? 240 : 440;
-    ctx.fillRect(32, y, w, 6);
-  }
-  // signature block
-  ctx.strokeStyle = "rgba(0,0,0,0.4)";
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(32, 520, 200, 60);
-  ctx.fillStyle = "#FFD400";
-  ctx.font = "italic 26px 'Inter', cursive";
-  ctx.fillText("~ duck ~", 60, 555);
-  // tiny doc icon
-  ctx.fillStyle = "rgba(0,0,0,0.7)";
-  ctx.fillRect(420, 36, 60, 24);
-  ctx.fillStyle = "#fff";
-  ctx.font = "bold 12px 'Inter', sans-serif";
-  ctx.fillText("✓ AI", 432, 50);
-  const tex = new THREE.CanvasTexture(c);
-  tex.anisotropy = 8;
-  tex.needsUpdate = true;
-  return tex;
-}
-
-function Documents() {
-  const messyTex = useMemo(() => makeMessyTexture(), []);
-  const cleanTex = useMemo(() => makeCleanTexture(), []);
-
-  const messyRef = useRef<THREE.Mesh>(null);
-  const cleanRef = useRef<THREE.Mesh>(null);
-  const messyMat = useRef<THREE.MeshStandardMaterial>(null);
-  const cleanMat = useRef<THREE.MeshStandardMaterial>(null);
-  const group = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    const v = POINTER.sClean;
-
-    if (messyMat.current) messyMat.current.opacity = 1 - v;
-    if (cleanMat.current) cleanMat.current.opacity = v;
-
-    if (messyRef.current) {
-      messyRef.current.rotation.z =
-        Math.sin(t * 0.8) * 0.04 * (1 - v) - 0.04 * (1 - v);
-      messyRef.current.rotation.y = Math.sin(t * 0.6) * 0.05 * (1 - v);
-      messyRef.current.position.x = -1 + (1 - v) * -0.05;
-      messyRef.current.position.y = Math.sin(t * 0.9) * 0.08 + 0.05;
+    if (ringA.current) {
+      ringA.current.rotation.z = t * 0.12;
+      ringA.current.rotation.x = Math.PI / 2 + Math.sin(t * 0.3) * 0.05;
     }
-    if (cleanRef.current) {
-      cleanRef.current.rotation.z = Math.sin(t * 0.6) * 0.03 * v;
-      cleanRef.current.rotation.y = Math.sin(t * 0.5) * 0.04 * v;
-      cleanRef.current.position.x = -1 + v * 0.05;
-      cleanRef.current.position.y = Math.sin(t * 0.7) * 0.08 + 0.05;
-      cleanRef.current.scale.setScalar(0.92 + v * 0.08);
+    if (ringB.current) {
+      ringB.current.rotation.z = -t * 0.09;
+      ringB.current.rotation.x = Math.PI / 2 + 0.35 + Math.sin(t * 0.2) * 0.04;
     }
-    if (group.current) {
-      group.current.rotation.y = (POINTER.sx - 0.5) * 0.2;
-      group.current.rotation.x = (POINTER.sy - 0.5) * 0.12;
+    if (shards.current) {
+      shards.current.children.forEach((child, i) => {
+        const o = orbits[i];
+        if (!o) return;
+        const a = o.phase + t * o.speed;
+        child.position.set(
+          Math.cos(a) * o.r,
+          o.y + Math.sin(t * 1.2 + o.phase) * 0.15,
+          Math.sin(a) * o.r * 0.6,
+        );
+        child.rotation.x = t * 0.6 + o.phase;
+        child.rotation.y = t * 0.4 - o.phase;
+      });
     }
   });
 
   return (
-    <group ref={group} position={[0.6, 0, 0]}>
-      <mesh ref={messyRef} position={[-1, 0, 0]}>
-        <planeGeometry args={[2.4, 3, 32, 32]} />
-        <meshStandardMaterial
-          ref={messyMat}
-          map={messyTex}
+    <group>
+      {/* soft volumetric glow disk behind the duck */}
+      <mesh position={[0, 0, -1.2]}>
+        <circleGeometry args={[2.8, 64]} />
+        <meshBasicMaterial
+          color="#FFD400"
           transparent
-          opacity={1}
-          roughness={0.95}
-          metalness={0}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      <mesh ref={cleanRef} position={[-1, 0, 0.01]}>
-        <planeGeometry args={[2.4, 3, 32, 32]} />
-        <meshStandardMaterial
-          ref={cleanMat}
-          map={cleanTex}
-          transparent
-          opacity={0}
-          roughness={0.6}
-          metalness={0.05}
-          emissive="#FFD400"
-          emissiveIntensity={0.04}
-          side={THREE.DoubleSide}
+          opacity={0.08}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
 
-      {/* clean doc glow underlay */}
-      <mesh position={[-1, 0, -0.05]}>
-        <planeGeometry args={[3.4, 4, 1, 1]} />
-        <meshBasicMaterial color="#FFD400" transparent opacity={0.06} />
+      {/* twin glass orbit rings around the duck */}
+      <mesh ref={ringA} position={[0, 0.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[2.8, 0.025, 24, 220]} />
+        <meshPhysicalMaterial
+          color="#FFD400"
+          emissive="#FFD400"
+          emissiveIntensity={0.5}
+          transmission={0.8}
+          thickness={0.4}
+          roughness={0.1}
+          metalness={0.1}
+          ior={1.45}
+          transparent
+          opacity={0.55}
+        />
       </mesh>
+      <mesh
+        ref={ringB}
+        position={[0, 0.1, 0]}
+        rotation={[Math.PI / 2 + 0.35, 0, 0.4]}
+      >
+        <torusGeometry args={[3.3, 0.018, 20, 220]} />
+        <meshPhysicalMaterial
+          color="#00E5FF"
+          emissive="#00E5FF"
+          emissiveIntensity={0.45}
+          transmission={0.85}
+          thickness={0.4}
+          roughness={0.08}
+          metalness={0.05}
+          ior={1.45}
+          transparent
+          opacity={0.45}
+        />
+      </mesh>
+
+      {/* orbiting glassy shards */}
+      <group ref={shards}>
+        {orbits.map((o, i) => (
+          <mesh key={i}>
+            <icosahedronGeometry args={[o.size, 0]} />
+            <meshPhysicalMaterial
+              color={o.hue}
+              emissive={o.hue}
+              emissiveIntensity={0.55}
+              transmission={0.7}
+              thickness={0.6}
+              roughness={0.12}
+              metalness={0.15}
+              ior={1.45}
+              clearcoat={1}
+              transparent
+              opacity={0.9}
+            />
+          </mesh>
+        ))}
+      </group>
     </group>
   );
 }
@@ -381,17 +283,24 @@ function SceneInner() {
       <Environment preset="city" />
 
       <PointerTracker />
-      <Documents />
-      <Laser />
+      <Ambience />
       <Duck />
 
       <Sparkles
-        count={60}
-        scale={[6, 4, 2]}
-        size={3}
-        speed={0.4}
+        count={90}
+        scale={[5, 4, 2]}
+        size={3.4}
+        speed={0.45}
         color="#FFD400"
-        opacity={0.7}
+        opacity={0.85}
+      />
+      <Sparkles
+        count={50}
+        scale={[4.5, 3.5, 1.5]}
+        size={2}
+        speed={0.6}
+        color="#00E5FF"
+        opacity={0.55}
       />
     </>
   );
@@ -450,7 +359,7 @@ export function DuckScene() {
     <div className="absolute inset-0">
       <Canvas
         dpr={[1, 2]}
-        camera={{ position: [0, 0.3, 7], fov: 36 }}
+        camera={{ position: [0, 0.3, 9], fov: 36 }}
         gl={{ antialias: true, alpha: true }}
       >
         <SceneInner />
