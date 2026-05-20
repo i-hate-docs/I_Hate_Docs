@@ -47,7 +47,7 @@ function Duck() {
   });
 
   return (
-    <group ref={root} position={[2.6, 0.1, 0]}>
+    <group ref={root} position={[2.5, 0.1, 0]}>
       {/* halo glow */}
       <mesh>
         <sphereGeometry args={[2.2, 32, 32]} />
@@ -168,7 +168,7 @@ function Laser() {
   return (
     <mesh
       ref={ref}
-      position={[0.4, 0.35, 0.4]}
+      position={[1.4, 0.35, 0.4]}
       rotation={[0, 0, Math.PI / 2]}
     >
       <cylinderGeometry args={[0.05, 0.05, 3.6, 24, 1, true]} />
@@ -333,7 +333,7 @@ function Documents() {
   });
 
   return (
-    <group ref={group}>
+    <group ref={group} position={[0.6, 0, 0]}>
       <mesh ref={messyRef} position={[-1, 0, 0]}>
         <planeGeometry args={[2.4, 3, 32, 32]} />
         <meshStandardMaterial
@@ -450,7 +450,7 @@ export function DuckScene() {
     <div className="absolute inset-0">
       <Canvas
         dpr={[1, 2]}
-        camera={{ position: [0, 0.3, 6.5], fov: 38 }}
+        camera={{ position: [0, 0.3, 7], fov: 36 }}
         gl={{ antialias: true, alpha: true }}
       >
         <SceneInner />

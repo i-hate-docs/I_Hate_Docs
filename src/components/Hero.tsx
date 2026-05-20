@@ -77,13 +77,14 @@ export function Hero() {
       />
       <div className="noise -z-10" />
 
-      {/* 3D scene — right half only */}
-      <div className="pointer-events-none absolute inset-y-0 right-0 -z-0 hidden w-[55vw] md:block">
+      {/* 3D scene — right half only, narrower at very wide viewports so it
+          sits on the right edge instead of bleeding into the headline */}
+      <div className="pointer-events-none absolute inset-y-0 right-0 -z-0 hidden md:block md:w-[55vw] lg:w-[48vw] xl:w-[44vw] 2xl:w-[40vw]">
         <DuckScene />
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 pb-24 pt-36 md:flex-row md:items-center md:pt-44">
-        <div className="flex-1 md:max-w-[640px]">
+        <div className="flex-1 md:max-w-[600px]">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-white/70">
             <span className="h-1.5 w-1.5 rounded-full bg-cyber animate-pulseGlow" />
             New · AI Slide Generator v2
@@ -128,21 +129,22 @@ export function Hero() {
             <MagneticButton as="a" href="#features" variant="secondary">
               Explore Pro
             </MagneticButton>
-            <div className="flex items-center gap-2 pl-2 text-xs text-white/50">
-              <span className="flex -space-x-1.5">
-                {["#FFD400", "#00E5FF", "#B026FF"].map((c) => (
-                  <span
-                    key={c}
-                    className="h-5 w-5 rounded-full ring-2 ring-obsidian"
-                    style={{ background: c }}
-                  />
-                ))}
-              </span>
-              Trusted by 38,000+ flock members
-            </div>
           </div>
 
-          <div className="mt-12 flex max-w-md items-center gap-6 text-xs text-white/50">
+          <div className="mt-6 flex items-center gap-3 text-xs text-white/55">
+            <span className="flex -space-x-1.5">
+              {["#FFD400", "#00E5FF", "#B026FF"].map((c) => (
+                <span
+                  key={c}
+                  className="h-5 w-5 rounded-full ring-2 ring-obsidian"
+                  style={{ background: c }}
+                />
+              ))}
+            </span>
+            <span>Trusted by 38,000+ flock members</span>
+          </div>
+
+          <div className="mt-10 flex max-w-md items-center gap-6 text-xs text-white/50">
             <Stat value="2.4M+" label="Pages processed" />
             <Stat value="120k" label="Slides generated" />
             <Stat value="99.98%" label="Uptime" />
