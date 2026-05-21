@@ -40,12 +40,12 @@ export function Footer() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-4 sm:justify-end">
-              <MagneticButton as="a" href="#signup" variant="primary">
+              <MagneticButton as="a" href="/register" variant="primary">
                 Start for Free
                 <span aria-hidden className="ml-1">→</span>
               </MagneticButton>
-              <MagneticButton as="a" href="#contact" variant="secondary">
-                Book a demo
+              <MagneticButton as="a" href="/login" variant="secondary">
+                Log in
               </MagneticButton>
             </div>
           </div>
