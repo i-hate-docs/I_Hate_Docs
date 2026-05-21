@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -97,10 +98,10 @@ export function Features() {
       ref={wrapRef}
       className="relative overflow-hidden bg-obsidian"
     >
-      <div className="mx-auto max-w-7xl px-6 pb-4 pt-8 md:pb-6 md:pt-10">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end md:gap-12">
+      <div className="mx-auto max-w-7xl px-6 pb-3 pt-28 md:pb-4 md:pt-32">
+        <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end md:gap-12">
           <div className="max-w-2xl">
-            <div className="mb-3 text-xs uppercase tracking-[0.28em] text-white/40">
+            <div className="mb-2 text-xs uppercase tracking-[0.28em] text-white/40">
               Features
             </div>
             <SplitText
@@ -121,7 +122,7 @@ export function Features() {
         </div>
       </div>
 
-      <div className="relative h-[75svh] md:h-[80svh]">
+      <div className="relative h-[62svh] md:h-[66svh]">
         <div
           ref={trackRef}
           className="absolute inset-y-0 left-0 flex items-center gap-8 pl-6 pr-24 will-change-transform"
@@ -139,13 +140,13 @@ export function Features() {
             <p className="text-white/65">
               Every shipping feature, behind one duck.
             </p>
-            <a
-              href="#pricing"
+            <Link
+              href="/pricing"
               className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-cyber px-5 py-3 text-sm font-medium text-black shadow-glow transition-transform hover:scale-[1.02]"
             >
               See pricing
               <span aria-hidden>→</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

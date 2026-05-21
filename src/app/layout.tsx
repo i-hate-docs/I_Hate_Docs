@@ -3,6 +3,9 @@ import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { CustomCursor } from "@/components/CustomCursor";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { SessionProvider } from "@/components/SessionProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -48,8 +51,14 @@ export default function RootLayout({
       className={`${inter.variable} ${display.variable} ${mono.variable} dark`}
     >
       <body className="bg-obsidian text-foreground antialiased">
-        <SmoothScroll>{children}</SmoothScroll>
-        <CustomCursor />
+        <SessionProvider>
+          <SmoothScroll>
+            <Navbar />
+            <main className="relative min-h-[100svh]">{children}</main>
+            <Footer />
+          </SmoothScroll>
+          <CustomCursor />
+        </SessionProvider>
       </body>
     </html>
   );

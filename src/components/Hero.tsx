@@ -120,13 +120,13 @@ export function Hero() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <MagneticButton as="a" href="#pricing" variant="primary">
+            <MagneticButton as="a" href="/register" variant="primary">
               Start for Free
               <span aria-hidden className="ml-1">
                 →
               </span>
             </MagneticButton>
-            <MagneticButton as="a" href="#features" variant="secondary">
+            <MagneticButton as="a" href="/features" variant="secondary">
               Explore Pro
             </MagneticButton>
           </div>
