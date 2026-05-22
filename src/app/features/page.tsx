@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Features } from "@/components/Features";
+import { DuckVsDoc } from "@/components/DuckVsDoc";
 
 export const metadata: Metadata = {
   title: "Features — I Hate Docs",
@@ -8,5 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function FeaturesPage() {
-  return <Features />;
+  return (
+    <>
+      <Features />
+      <DuckVsDoc />
+    </>
+  );
 }

@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Sparkles } from "@react-three/drei";
-import { useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 const POINTER = {
@@ -362,7 +362,9 @@ export function DuckScene() {
         camera={{ position: [0, 0.3, 9], fov: 36 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <SceneInner />
+        <Suspense fallback={null}>
+          <SceneInner />
+        </Suspense>
       </Canvas>
     </div>
   );

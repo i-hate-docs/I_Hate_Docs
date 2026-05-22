@@ -7,9 +7,11 @@ export function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduceMotion(mq.matches);
     const onChange = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
@@ -76,7 +78,7 @@ export function CustomCursor() {
     };
   }, [visible]);
 
-  if (reduceMotion) return null;
+  if (!mounted || reduceMotion) return null;
 
   return (
     <>

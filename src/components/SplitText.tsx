@@ -33,35 +33,34 @@ export function SplitText({
 
   useEffect(() => {
     if (!ref.current) return;
-    const items = ref.current.querySelectorAll(
-      by === "char" ? ".split-char" : ".split-word",
-    );
-    gsap.set(items, { yPercent: 110, opacity: 0, rotate: 2 });
-    const animate = () =>
-      gsap.to(items, {
-        yPercent: 0,
-        opacity: 1,
-        rotate: 0,
-        duration,
-        ease: "power4.out",
-        stagger,
-        delay,
-      });
+    const ctx = gsap.context(() => {
+      const items = ref.current!.querySelectorAll(
+        by === "char" ? ".split-char" : ".split-word",
+      );
+      gsap.set(items, { yPercent: 110, opacity: 0, rotate: 2 });
+      const animate = () =>
+        gsap.to(items, {
+          yPercent: 0,
+          opacity: 1,
+          rotate: 0,
+          duration,
+          ease: "power4.out",
+          stagger,
+          delay,
+        });
 
-    let st: ScrollTrigger | undefined;
-    if (trigger === "load") {
-      animate();
-    } else {
-      st = ScrollTrigger.create({
-        trigger: ref.current,
-        start,
-        once: true,
-        onEnter: animate,
-      });
-    }
-    return () => {
-      st?.kill();
-    };
+      if (trigger === "load") {
+        animate();
+      } else {
+        ScrollTrigger.create({
+          trigger: ref.current,
+          start,
+          once: true,
+          onEnter: animate,
+        });
+      }
+    }, ref);
+    return () => ctx.revert();
   }, [by, delay, duration, stagger, trigger, start]);
 
   const wordNodes = text.split(/(\s+)/).map((token, i) => {

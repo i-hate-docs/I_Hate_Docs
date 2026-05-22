@@ -104,7 +104,7 @@ export function Pricing() {
             Free forever for hobbyists. Paid plans for ducks who mean business.
           </p>
 
-          <div className="mt-8 inline-flex items-center gap-1 rounded-full glass-strong p-1 text-xs">
+          <div className="mt-8 inline-flex items-center gap-2 border-b border-white/10 pb-2">
             <BillingToggle
               active={!yearly}
               onClick={() => setYearly(false)}
@@ -139,6 +139,7 @@ export function Pricing() {
   );
 }
 
+
 function BillingToggle({
   active,
   onClick,
@@ -151,15 +152,15 @@ function BillingToggle({
   return (
     <button
       onClick={onClick}
-      className={`relative rounded-full px-4 py-1.5 text-xs transition-colors ${
-        active ? "text-black" : "text-white/70 hover:text-white"
+      className={`relative px-4 py-2 text-sm font-medium transition-colors ${
+        active ? "text-white" : "text-white/60 hover:text-white"
       }`}
     >
       {active && (
         <motion.span
-          layoutId="billing-pill"
-          className="absolute inset-0 -z-10 rounded-full bg-cyber shadow-glow"
-          transition={{ type: "spring", stiffness: 320, damping: 30 }}
+          layoutId="billing-slider"
+          className="absolute -bottom-2 left-0 right-0 h-[2px] bg-duck-gradient shadow-glow"
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       )}
       {label}
@@ -243,7 +244,7 @@ function PricingCard({ tier, yearly }: { tier: Tier; yearly: boolean }) {
             transition={{ duration: 0.25 }}
             className="flex items-end gap-1"
           >
-            <span className="font-display text-5xl font-semibold text-white">
+            <span className={`font-display text-5xl font-semibold ${yearly ? "bg-duck-gradient bg-clip-text text-transparent" : "text-white"}`}>
               ${price}
             </span>
             <span className="pb-2 text-xs text-white/45">

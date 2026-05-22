@@ -27,6 +27,19 @@ export const authOptions: NextAuthOptions = {
         const parsed = credentialsSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
+        // ── Hardcoded test user (no DB required) ──
+        if (
+          parsed.data.email.toLowerCase() === "admin@admin.com" &&
+          parsed.data.password === "admin123"
+        ) {
+          return {
+            id: "test-admin-id",
+            email: "admin@admin.com",
+            name: "Admin",
+            image: null,
+          };
+        }
+
         const user = await prisma.user.findUnique({
           where: { email: parsed.data.email.toLowerCase() },
         });

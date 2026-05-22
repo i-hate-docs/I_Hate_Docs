@@ -93,64 +93,66 @@ export function Features() {
   }, []);
 
   return (
-    <section
-      id="features"
-      ref={wrapRef}
-      className="relative overflow-hidden bg-obsidian"
-    >
-      <div className="mx-auto max-w-7xl px-6 pb-3 pt-28 md:pb-4 md:pt-32">
-        <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end md:gap-12">
-          <div className="max-w-2xl">
-            <div className="mb-2 text-xs uppercase tracking-[0.28em] text-white/40">
-              Features
+    <div>
+      <section
+        id="features"
+        ref={wrapRef}
+        className="relative overflow-hidden bg-obsidian"
+      >
+        <div className="mx-auto max-w-7xl px-6 pb-3 pt-28 md:pb-4 md:pt-32">
+          <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end md:gap-12">
+            <div className="max-w-2xl">
+              <div className="mb-2 text-xs uppercase tracking-[0.28em] text-white/40">
+                Features
+              </div>
+              <SplitText
+                as="h2"
+                text="One platform. Every document."
+                by="word"
+                className="font-display text-3xl font-semibold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-5xl"
+              />
             </div>
-            <SplitText
-              as="h2"
-              text="One platform. Every document."
-              by="word"
-              className="font-display text-3xl font-semibold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-5xl"
-            />
-          </div>
-          <p className="max-w-sm text-sm text-white/55">
-            Scroll →{" "}
-            <span className="text-white/85">
-              to glide through the suite.
-            </span>{" "}
-            Built for legal, ops, sales, and the chaos in your downloads
-            folder.
-          </p>
-        </div>
-      </div>
-
-      <div className="relative h-[62svh] md:h-[66svh]">
-        <div
-          ref={trackRef}
-          className="absolute inset-y-0 left-0 flex items-center gap-8 pl-6 pr-24 will-change-transform"
-        >
-          {FEATURES.map((f) => (
-            <FeatureCard key={f.id} feature={f} />
-          ))}
-          <div className="flex w-[40vw] shrink-0 flex-col justify-center gap-4 rounded-3xl glass-strong p-10">
-            <div className="text-xs uppercase tracking-[0.28em] text-white/40">
-              + and more
-            </div>
-            <h3 className="font-display text-3xl font-semibold leading-tight text-white">
-              Brand kits, OCR, batch automations, secure rooms, audit trails.
-            </h3>
-            <p className="text-white/65">
-              Every shipping feature, behind one duck.
+            <p className="max-w-sm text-sm text-white/55">
+              Scroll →{" "}
+              <span className="text-white/85">
+                to glide through the suite.
+              </span>{" "}
+              Built for legal, ops, sales, and the chaos in your downloads
+              folder.
             </p>
-            <Link
-              href="/pricing"
-              className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-cyber px-5 py-3 text-sm font-medium text-black shadow-glow transition-transform hover:scale-[1.02]"
-            >
-              See pricing
-              <span aria-hidden>→</span>
-            </Link>
           </div>
         </div>
-      </div>
-    </section>
+
+        <div className="relative h-[62svh] md:h-[66svh]">
+          <div
+            ref={trackRef}
+            className="absolute inset-y-0 left-0 flex items-center gap-8 pl-6 pr-24 will-change-transform"
+          >
+            {FEATURES.map((f) => (
+              <FeatureCard key={f.id} feature={f} />
+            ))}
+            <div className="flex w-[40vw] shrink-0 flex-col justify-center gap-4 rounded-3xl glass-strong p-10">
+              <div className="text-xs uppercase tracking-[0.28em] text-white/40">
+                + and more
+              </div>
+              <h3 className="font-display text-3xl font-semibold leading-tight text-white">
+                Brand kits, OCR, batch automations, secure rooms, audit trails.
+              </h3>
+              <p className="text-white/65">
+                Every shipping feature, behind one duck.
+              </p>
+              <Link
+                href="/pricing"
+                className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-cyber px-5 py-3 text-sm font-medium text-black shadow-glow transition-transform hover:scale-[1.02]"
+              >
+                See pricing
+                <span aria-hidden>→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
