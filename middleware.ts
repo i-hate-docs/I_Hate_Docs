@@ -2,10 +2,11 @@ import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
   callbacks: {
-    authorized: ({ req, token }) => !!token,
+    authorized: ({ token }) => !!token,
   },
 });
 
 export const config = {
+  // Protect all /dashboard/** routes — public pages are unaffected
   matcher: ["/dashboard/:path*"],
 };

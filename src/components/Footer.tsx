@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import { DuckLogo } from "./DuckLogo";
 import { MagneticButton } from "./MagneticButton";
 import { SplitText } from "./SplitText";
@@ -14,46 +15,50 @@ const cols: Array<{ title: string; links: string[] }> = [
 ];
 
 export function Footer() {
+  const { status } = useSession();
+  const isLoggedIn = status === "authenticated";
+
   return (
     <footer className="relative overflow-hidden bg-obsidian">
-      {/* big CTA */}
-      <div className="relative mx-auto max-w-7xl px-6 pt-28">
-        <div className="relative overflow-hidden rounded-[32px] glass-strong p-10 sm:p-16">
-          <div
-            className="pointer-events-none absolute inset-0 -z-0 opacity-80"
-            style={{
-              background:
-                "radial-gradient(800px 400px at 80% 20%, rgba(255,212,0,0.25), transparent 60%), radial-gradient(600px 300px at 10% 90%, rgba(0,229,255,0.2), transparent 60%)",
-            }}
-          />
-          <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-end">
-            <div>
-
-              <SplitText
-                as="h2"
-                text="Ready to join the flock?"
-                by="word"
-                className="font-display text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl"
-              />
-              <p className="mt-4 max-w-md text-sm text-white/65">
-                Free forever. No card. No quack. Just the duck doing the docs.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-4 sm:justify-end">
-              <MagneticButton as="a" href="/register" variant="primary">
-                Start for Free
-                <span aria-hidden className="ml-1">→</span>
-              </MagneticButton>
-              <MagneticButton as="a" href="/login" variant="secondary">
-                Log in
-              </MagneticButton>
+      {/* big CTA — hidden for signed-in users */}
+      {!isLoggedIn && (
+        <div className="relative mx-auto max-w-7xl px-6 pt-28">
+          <div className="relative overflow-hidden rounded-[32px] glass-strong p-10 sm:p-16">
+            <div
+              className="pointer-events-none absolute inset-0 -z-0 opacity-80"
+              style={{
+                background:
+                  "radial-gradient(800px 400px at 80% 20%, rgba(255,212,0,0.25), transparent 60%), radial-gradient(600px 300px at 10% 90%, rgba(0,229,255,0.2), transparent 60%)",
+              }}
+            />
+            <div className="relative grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-end">
+              <div>
+                <SplitText
+                  as="h2"
+                  text="Ready to join the flock?"
+                  by="word"
+                  className="font-display text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl"
+                />
+                <p className="mt-4 max-w-md text-sm text-white/65">
+                  Free forever. No card. No quack. Just the duck doing the docs.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-4 sm:justify-end">
+                <MagneticButton as="a" href="/register" variant="primary">
+                  Start for Free
+                  <span aria-hidden className="ml-1">→</span>
+                </MagneticButton>
+                <MagneticButton as="a" href="/login" variant="secondary">
+                  Log in
+                </MagneticButton>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* link columns */}
-      <div className="mx-auto mt-20 max-w-7xl px-6">
+      <div className={`mx-auto max-w-7xl px-6 ${isLoggedIn ? "pt-16 mt-0" : "mt-20"}`}>
         <div className="grid gap-12 md:grid-cols-[1.4fr_3fr]">
           <div>
             <div className="flex items-center gap-2">

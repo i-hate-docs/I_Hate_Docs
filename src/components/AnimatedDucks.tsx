@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useAnimation, useMotionValue, useSpring, useTransform, Variants } from "framer-motion";
+import { motion, useAnimation, useMotionValue, useSpring, useTransform, type Variants, type Transition } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 
 export type DuckState = "idle" | "tracking" | "hiding" | "gasping" | "cheering" | "judging";
@@ -14,7 +14,7 @@ interface AnimatedDucksProps {
 
 // Custom bouncy easing
 const bounceTransition = {
-  type: "spring",
+  type: "spring" as const,
   stiffness: 300,
   damping: 15,
   mass: 1,
@@ -141,7 +141,7 @@ function DuckCharacter({ color, state, caretPosition, typingSpeed, isValid, inde
         // Black duck peeks based on typing speed
         const peekAmount = Math.min(1, typingSpeed * 1.5); // 0 to 1
         
-        const peekTransition = { type: "tween", ease: "easeOut", duration: 0.15 };
+        const peekTransition: Transition = { type: "tween", ease: "easeOut", duration: 0.15 };
         
         // Head sneaks out to the side to peek from behind the wings
         headControls.start({ 

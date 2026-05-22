@@ -130,6 +130,50 @@ html.lenis body {
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
+
+  /* ── PDF tool option controls ─────────────────────────────────────── */
+  .option-input {
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 13px;
+    padding: 8px 12px;
+    outline: none;
+    transition: border-color 200ms, box-shadow 200ms;
+  }
+  .option-input:focus {
+    border-color: rgba(255, 212, 0, 0.45);
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, 0.08);
+  }
+  .option-select {
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='rgba(255,255,255,0.3)'><path d='M4 6l4 4 4-4'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+    transition: border-color 200ms, box-shadow 200ms;
+  }
+  .option-select:focus {
+    border-color: rgba(255, 212, 0, 0.45);
+    box-shadow: 0 0 0 3px rgba(255, 212, 0, 0.08);
+  }
+  .option-select option {
+    background: #1a1a1a;
+    color: rgba(255, 255, 255, 0.8);
+  }
 }
 
 .split-char {
