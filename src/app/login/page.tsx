@@ -148,7 +148,14 @@ function LoginForm({
     
     duckCtx?.setDuckState("cheering"); // Success!
     setTimeout(() => {
-      router.push(res.url ?? callbackUrl);
+      // Extract relative path only — res.url may contain an absolute URL
+      // with the wrong host when NEXTAUTH_URL is misconfigured.
+      let dest = "/dashboard";
+      try {
+        const raw = res.url ?? callbackUrl;
+        dest = raw.startsWith("http") ? new URL(raw).pathname : raw;
+      } catch { /* fallback */ }
+      router.push(dest);
       router.refresh();
     }, 1000);
   };
