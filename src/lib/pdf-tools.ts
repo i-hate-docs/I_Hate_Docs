@@ -115,6 +115,7 @@ export const PDF_TOOLS: PdfTool[] = [
     stirlingEndpoint: "/api/v1/convert/pdf/word",
     multiFile: false,
     acceptedTypes: ["application/pdf"],
+    comingSoon: true,
   },
   {
     id: "pdf-to-images",
@@ -127,6 +128,7 @@ export const PDF_TOOLS: PdfTool[] = [
     multiFile: false,
     acceptedTypes: ["application/pdf"],
     defaultParams: { imageFormat: "png", singleOrMultiple: "multiple" },
+    comingSoon: true,
   },
   {
     id: "images-to-pdf",
@@ -149,6 +151,7 @@ export const PDF_TOOLS: PdfTool[] = [
     stirlingEndpoint: "/api/v1/convert/pdf/html",
     multiFile: false,
     acceptedTypes: ["application/pdf"],
+    comingSoon: true,
   },
   // ── Security ────────────────────────────────────────────────────────────────
   {
@@ -205,6 +208,7 @@ export const PDF_TOOLS: PdfTool[] = [
     multiFile: false,
     acceptedTypes: ["application/pdf"],
     defaultParams: { ocrType: "Force-OCR", ocrLanguages: "eng" },
+    comingSoon: true,
   },
   {
     id: "page-numbers",
