@@ -18,6 +18,7 @@
 import { useCallback, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatBytes } from "@/lib/pdf-tools";
+import { LOCAL_OPS, processLocally } from "@/lib/browserPdfOps";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -246,40 +247,50 @@ export function PdfDropZone({
     setState("processing");
     setProgress(0);
 
-    // Fake progress while the fetch is in flight
     const ticker = setInterval(() => {
       setProgress((p) => Math.min(p + Math.random() * 10 + 3, 88));
     }, 350);
 
     try {
-      const body = new FormData();
-      // action is now the URL segment — still append it so the legacy proxy
-      // route stays compatible if someone hits it directly.
-      body.append("action", action);
-      if (multiFile) {
-        files.forEach((f) => body.append("fileInput", f.file));
-      } else {
-        body.append("fileInput", files[0].file);
-      }
-      Object.entries(extraParams).forEach(([k, v]) => body.append(k, v));
+      let url: string;
+      let filename: string;
 
-      // POST to /api/pdf/[action] — runs pdf-lib locally, Stirling for heavy ops
-      const res = await fetch(`/api/pdf/${action}`, { method: "POST", body });
+      if (LOCAL_OPS.has(action)) {
+        // ── Browser path: pdf-lib runs in the tab — no upload, no size limit ──
+        const result = await processLocally(
+          action,
+          files.map((f) => f.file),
+          extraParams,
+        );
+        url = result.url;
+        filename = result.filename;
+      } else {
+        // ── Server path: Stirling-PDF heavy ops (OCR, PDF→Word, etc.) ──
+        const body = new FormData();
+        body.append("action", action);
+        if (multiFile) {
+          files.forEach((f) => body.append("fileInput", f.file));
+        } else {
+          body.append("fileInput", files[0].file);
+        }
+        Object.entries(extraParams).forEach(([k, v]) => body.append(k, v));
+
+        const res = await fetch(`/api/pdf/${action}`, { method: "POST", body });
+
+        if (!res.ok) {
+          const json = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+          throw new Error(String(json.error ?? `HTTP ${res.status}`));
+        }
+
+        const blob = await res.blob();
+        url = URL.createObjectURL(blob);
+        const cd = res.headers.get("content-disposition") ?? "";
+        const match = cd.match(/filename="?([^";]+)"?/);
+        filename = match?.[1] ?? `ihatedocs-${action}.pdf`;
+      }
 
       clearInterval(ticker);
       setProgress(100);
-
-      if (!res.ok) {
-        const json = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
-        throw new Error(String(json.error ?? `HTTP ${res.status}`));
-      }
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const cd = res.headers.get("content-disposition") ?? "";
-      const match = cd.match(/filename="?([^";]+)"?/);
-      const filename = match?.[1] ?? `ihatedocs-${action}.pdf`;
-
       setDownloadUrl(url);
       setDownloadFilename(filename);
       setState("done");
